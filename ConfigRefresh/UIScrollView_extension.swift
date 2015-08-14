@@ -16,12 +16,12 @@ var tConfigRefreshDelegate: Void?
 extension UIScrollView {
     
     // 下拉刷新 代理
-    var configRefreshDelegate: HeaderRefreshDelegate {
+    var configRefreshDelegate: ConfigRefreshDelegate {
         set {
             objc_setAssociatedObject(self, &tConfigRefreshDelegate, newValue as! UIViewController, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
         }
         get {
-            return objc_getAssociatedObject(self, &tConfigRefreshDelegate) as! HeaderRefreshDelegate
+            return objc_getAssociatedObject(self, &tConfigRefreshDelegate) as! ConfigRefreshDelegate
         }
     }
     
@@ -67,7 +67,7 @@ extension UIScrollView {
     
 }
 
-@objc protocol HeaderRefreshDelegate {
+@objc protocol ConfigRefreshDelegate {
     optional func headerRefresh(view: UIView)
     optional func footerRefresh(view: UIView)
 }

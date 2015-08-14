@@ -14,7 +14,7 @@ class ViewController: UITableViewController, ConfigRefreshDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
        
-        self.tableView.refreshDelegate = self
+        self.tableView.configRefreshDelegate = self
         self.tableView.headerRefresh = true
     }
 
