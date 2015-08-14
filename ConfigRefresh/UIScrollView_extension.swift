@@ -9,21 +9,21 @@
 import UIKit
 
 var tHeaderRefresh: Void?
+var tFooterRefresh: Void?
+
 var tConfigRefreshDelegate: Void?
 
 extension UIScrollView {
-
+    
     // 下拉刷新 代理
-    var refreshDelegate: ConfigRefreshDelegate {
+    var configRefreshDelegate: HeaderRefreshDelegate {
         set {
             objc_setAssociatedObject(self, &tConfigRefreshDelegate, newValue as! UIViewController, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
         }
         get {
-            return objc_getAssociatedObject(self, &tConfigRefreshDelegate) as! ConfigRefreshDelegate
+            return objc_getAssociatedObject(self, &tConfigRefreshDelegate) as! HeaderRefreshDelegate
         }
     }
-    
-    
     
     
     // 下拉刷新 bool
@@ -32,7 +32,7 @@ extension UIScrollView {
             objc_setAssociatedObject(self, &tHeaderRefresh, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
             if newValue == true {
                 let header = MJRefreshNormalHeader { () -> Void in
-                    self.refreshDelegate.headerRefresh(self)
+                    self.configRefreshDelegate.headerRefresh!(self)
                 }
                 /**
                 *  配置参数
@@ -47,13 +47,27 @@ extension UIScrollView {
         get {
             return objc_getAssociatedObject(self, &tHeaderRefresh) as! Bool
         }
-        
     }
-
+    
+    // 下拉刷新 bool
+    var footerRefresh: Bool {
+        set {
+            objc_setAssociatedObject(self, &tFooterRefresh, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+            if newValue == true {
+                let footer = MJRefreshAutoNormalFooter { () -> Void in
+                    self.configRefreshDelegate.footerRefresh!(self)
+                }
+                self.footer = footer
+            }
+        }
+        get {
+            return objc_getAssociatedObject(self, &tHeaderRefresh) as! Bool
+        }
+    }
+    
 }
 
-
-protocol ConfigRefreshDelegate {
-    func headerRefresh(view: UIView)
-    func footerRefresh(view: UIView)
+@objc protocol HeaderRefreshDelegate {
+    optional func headerRefresh(view: UIView)
+    optional func footerRefresh(view: UIView)
 }
